@@ -1,7 +1,7 @@
 import { useParams } from 'next/navigation';
 import { CartContext } from '@/app/context/CartContext';
 import { ProductContext } from '@/app/context/ProductContext';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Footer from './Footer';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -10,10 +10,17 @@ const IndividualProducts = () => {
   const id = useParams();
   const products = useContext(ProductContext);
   const { addtoCart } = useContext(CartContext);
+  const [activeImg, setActiveImage] = useState('');
 
-  const product = products.find((item) => {
+  const product = products.find((item: any) => {
     return item._id === id.products;
   });
+
+  useEffect(() => {
+    if (product) {
+      setActiveImage(product.image['0']);
+    }
+  }, [product]);
 
   if (!product) {
     return (
@@ -24,7 +31,7 @@ const IndividualProducts = () => {
   }
 
   const { price, name, details, _id, image } = product;
-  const [activeImg, setActiveImage] = useState(image['0'])
+ 
 
   return (
     <section className='pt-32 pb-12 lg:py-32 h-screen items-center'>
@@ -33,7 +40,7 @@ const IndividualProducts = () => {
         <div className='flex flex-col gap-6 lg:w-2/4'>
                 <img src={activeImg} alt="" className='w-full h-full aspect-square object-cover rounded-xl'/>
                 <div className='flex flex-row gap-2 h-24'>
-                {image.map((imgSrc, index) => (
+                {image.map((imgSrc: any, index: any) => (
                     <img
                     key={index}
                     src={imgSrc}
